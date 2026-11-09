@@ -23,31 +23,32 @@ def estimate_pi(N, r=1.0):
     return 4 / r**2 * inside / N
 ```
 
-## How accurate is the Monte Carlo estimates?
+## How accurate are the Monte Carlo estimates?
 
-*This report uses data from  2,000 runs Monte-Carlo estimates, each using N = 10,000 points per estimate. Re-running the notebook may give slightly different results*
+*These results use 2,000 Monte Carlo estimates for each choice of N and r. Re-running the notebook may give slightly different results*
+
+Across $\text{repeats}=2,000$ Monte-Carlo estimates with $N=10,000$, the mean pi estimate was $\hat\pi = 3.1407$, with standard deviation $\hat\sigma = 0.0165$. The expected standard deviation was $\sigma = 0.0164$ (percentage error of just 0.6% between measured and predicted values) so results closely match the theory.
 
 ![pi histogram](out/plots/pi_histogram.png)
 
-Across $\text{repeats}=2,000$ Monte-Carlo estimates with $N=10,000$, the mean pi estimate was $\hat\pi = 3.1407$, with standard deviation $\hat\sigma = 0.0165$. The calculated expected standard deviation was $\sigma = 0.0164$ (percentage error of just 0.6%) so results closely match the theory.
 
-From $\sigma = 4\sqrt{\frac{p(1-p)}{N}} = CN^{-1/2}$, where $C=4\sqrt{p(1-p)}$, taking logs gives $$\log \sigma = -\frac{1}{2}\log N + \log C$$
+From $\sigma = 4\sqrt{\frac{p(1-p)}{N}} = CN^{-1/2}$, where $C=4\sqrt{p(1-p)}$ and $p=\frac{\pi r^2}{4}$, taking logs gives $$\log \sigma = -\frac{1}{2}\log N + \log C$$
 
-Hence we expect the relationship $\sigma \propto N^{-1/2}$. This means fitting sample_sizes vs sigmas should give a gradient of $-0.5$. We find $\text{measured slope} = -0.510$ so our simulation scales with theory.
+Hence we expect the relationship $\sigma \propto N^{-1/2}$. This means fitting $\log \sigma$ vs $\log N$ should give a gradient of $-0.5$. We find $\text{measured slope} = -0.510$ so our simulation scales with theory.
 
-Comparing radii/box sizes, we find 
+![pi scaling](out/plots/pi_scaling.png)
 
-| Radius squared | Relative error $\times \sqrt{N}$ | Expected value |
+Comparing two circle radii, we find 
+
+| Radius squared | Relative SD $\times \sqrt{N}$ | Expected value |
 | ---: | ---: | ---: |
 | 1.000 | 0.539 | 0.523 |
 | 0.667 | 0.967 | 0.954 |
 
 
-where $\text{relative error}= \frac{SD(\hat\pi)}{\pi}$. As the spread decreases with $\frac{1}{N}$, we multiply by $\sqrt{N}$ to remove that dependence. The predicted value is
+where $\text{relative SD}= \frac{SD(\hat\pi)}{\pi}$. As the spread decreases with $\frac{1}{\sqrt{N}}$, we multiply by $\sqrt{N}$ to remove that dependence. The predicted value is
 
 $$\text{relative error} \times \sqrt{N} = \sqrt{\frac{1-p}{p}}$$
-
-$$p=\frac{\pi r^2}{4}$$.
 
 Both measured values are close to their predictions. The smaller circle produces a larger relative spread, because fewer points land inside it.
 
