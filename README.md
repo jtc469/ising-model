@@ -1,5 +1,27 @@
 # Ising Model
 
+## How do we estimate pi?
+
+We generate N random points uniformly in the unit square, ($0 \leq x,y < 1$). A point lies inside a quarter-circle of radius r if ($x^2+y^2<r^2$), where ($0<r\leq1$).
+
+The proportion of points inside the quarter-circle approximates its area divided by the square’s area:
+$$
+\frac{\text{points inside}}{N}\approx\frac{\pi r^2}{4}.
+$$
+
+
+Rearranging gives our estimate:
+$$
+\hat{\pi}=\frac{4}{r^2}\frac{\text{points inside}}{N}.
+$$
+
+```python
+def estimate_pi(N, r=1.0):
+    x = seed.random(N)
+    y = seed.random(N)
+    inside = np.count_nonzero(x**2 + y**2 < r**2)
+    return 4 / r**2 * inside / N
+```
 
 ## How accurate is the Monte Carlo estimates?
 
