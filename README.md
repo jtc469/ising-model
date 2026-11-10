@@ -27,7 +27,13 @@ def estimate_pi(N, r=1.0):
 
 *These results use 2,000 Monte Carlo estimates for each choice of N and r. Re-running the notebook may give slightly different results*
 
-Across $\text{repeats}=2,000$ Monte-Carlo estimates with $N=10,000$, the mean pi estimate was $\hat\pi = 3.1407$, with standard deviation $\hat\sigma = 0.0165$. The expected standard deviation was $\sigma = 0.0164$ (percentage error of just 0.6% between measured and predicted values) so results closely match the theory.
+The number of points inside the quarter-circle is binomial, so for large N the distribution is approximately Gaussian so I chose to fit it to that.
+
+Across $\text{repeats}=2,000$ Monte-Carlo estimates with $N=10,000$, the mean pi estimate was $\hat\pi = 3.1407$, with standard deviation $\hat\sigma = 0.0165$. The expected standard deviation was $\sigma = 0.0164$ so results closely match the theory.
+
+A standard deviation measures the uncertainty of one Monte Carlo simulation with N points. It scales with $\frac{1}{\sqrt N}$ i.e the uncertainty of the average of 2,000 independent estimates is smaller by $\sqrt 2000$
+
+
 
 ![pi histogram](out/plots/pi_histogram.png)
 
@@ -53,3 +59,30 @@ $$\text{relative error} \times \sqrt{N} = \sqrt{\frac{1-p}{p}}$$
 Both measured values are close to their predictions. The smaller circle produces a larger relative spread, because fewer points land inside it.
 
 For $N=10{,}000$, $\sqrt N=100$, so the measured relative spreads are 0.539% and 0.967%. The smaller circle therefore gives about 1.8 times as much spread for the same number of points.
+
+
+## Simulating the Ising Model
+
+### What is the Ising Model? 
+
+It's a simple model of magnetism. In one dimension, it's like a row of tiny magnets. Each one can point in only two directions. Each spin only interacts with it's immediate neighbours.
+
+`↑  ↑  ↓  ↑  ↓  ↓  ↑`
+
+Neighbouring spins have lower energy when they point the same way, i.e an entire aligned row have the lowest possible energy. $J>0$ measures how strongly neighbours interact. Temperature affects how much higher-energy arrangements occur:
+- At low temperature, the system strongly favours low-energy arrangements, so neighbours tend to align.
+- At high temperature, higher-energy arrangements become more common, so the spins are more disordered.
+
+We join the ends of the rows together to form a ring.
+
+### What is the Metropolis Algorithm?
+
+We need a way to generate spin arrangements with the right probabilities for a given temperature. The Metropolis algorithm does this by repeatedly proposing a small change and deciding whether to accept it.
+
+Each step is:
+1. Pick a spin at random.
+2. Calculate how much the total energy would change if it flipped. Call this change $\Delta E=E_{\text{after}}-E_{\text{before}}$.
+3. If the energy decreases or stays the same, accept the flip.
+4. If the energy increases, accept it with probability$P=e^{-\Delta E/T}$
+
+To simplify, we just use units where Boltzmann’s constant $k_B=1$
