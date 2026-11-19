@@ -1,5 +1,11 @@
 # Ising Model
 
+
+Proofs checklist
+- Expected S.D = 4*sqrt(p*(1-p)/N)
+- Expected slope = -0.5
+
+
 ## How do we estimate pi?
 
 We generate N random points uniformly in the unit square, ($0 \leq x,y < 1$). A point lies inside a quarter-circle of radius r if ($x^2+y^2<r^2$), where ($0<r\leq1$).
@@ -260,3 +266,9 @@ so fitting $\log\xi$ vs $\log(T-T_c)$ should give a gradient of $-\nu$. We find 
 ![2d power law](out/plots/ising_2d_xi_power_law.png)
 
 This is a bit below 1. The power law is only exact very close to $T_c$ and my temperatures go up to $3.4J$. Fitting the exact values of $\xi$ over the same temperatures gives 0.87, so the simulation is doing what it should. I can't go much closer to $T_c$ because $\xi$ would get close to the size of the lattice, and the simulation also takes much longer to settle there.
+
+
+
+## Further Reading
+
+Investigate non-interacting fermionic quantum field theory, which provides a very simple approach to the 2D ising model.
