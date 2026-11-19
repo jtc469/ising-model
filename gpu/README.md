@@ -27,15 +27,24 @@ Additions: the exact Onsager $e(T)$ and $C(T)$ curves, the Binder cumulant cross
 
 ## Running on the Launchpad instance
 
+One-time setup. The system Python is externally managed, so use a venv:
+
 ```bash
-git clone <repo> && cd ising-model
-pip install -r gpu/requirements.txt      # skip torch if you're in an NGC PyTorch container
-python gpu/selftest.py                   # must say ALL PASSED
-python gpu/benchmark.py                  # throughput per GPU
-bash gpu/run_all.sh                      # everything; or run the scripts one at a time
+python3 -m venv ~/ising-venv             # if this fails: sudo apt install python3-venv
+source ~/ising-venv/bin/activate
+pip install -r gpu/requirements.txt      # Linux torch wheels include CUDA
 ```
 
-Run inside `tmux` so a dropped SSH connection doesn't kill the job. Outputs go to `gpu/out/plots` (same filenames as the notebook, plus `ising_2d_energy.png`, `ising_2d_binder.png` and `ising_2d_finite_size_scaling.png`) and `gpu/out/data` (`.npz` raw per-replica results and `*_summary.json`).
+Run through Slurm, from the repo root:
+
+```bash
+sbatch gpu/ising.sbatch python gpu/selftest.py    # check slurm-<id>.out says ALL PASSED
+sbatch gpu/ising.sbatch python gpu/benchmark.py
+sbatch gpu/ising.sbatch                           # full pipeline (gpu/run_all.sh)
+squeue                                            # job status; tail -f slurm-<id>.out to follow
+```
+
+Any script and its arguments can follow `gpu/ising.sbatch`, for example `sbatch gpu/ising.sbatch python gpu/run_thermo.py --L 64 128 256 512`. The job requests 2 GPUs (`--gres=gpu:2`), and the scripts use every GPU Slurm assigns. Set `VENV=/path` if your venv lives somewhere else. Outputs go to `gpu/out/plots` (same filenames as the notebook, plus `ising_2d_energy.png`, `ising_2d_binder.png` and `ising_2d_finite_size_scaling.png`) and `gpu/out/data` (`.npz` raw per-replica results and `*_summary.json`).
 
 Useful flags (all scripts support `--help`):
 
