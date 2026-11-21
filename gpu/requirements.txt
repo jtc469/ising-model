@@ -1,6 +1,0 @@
-# Install torch with CUDA first if the image doesn't have it (NGC PyTorch containers do):
-#   pip install torch --index-url https://download.pytorch.org/whl/cu124
-torch>=2.3
-numpy
-scipy
-matplotlib

@@ -1,7 +1,8 @@
-.venv/
-.ipynb_checkpoints/
-__pycache__/
-working_notes.md
-notes/
-analysis/
-ising-model.py
+/*
+
+!/.gitignore
+!/README.md
+!/main.ipynb
+!/requirements.txt
+
+!/plots/*
